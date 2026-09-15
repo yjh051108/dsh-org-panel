@@ -15,9 +15,13 @@
   },
   "files": [
     "lib",
-    "public"
+    "public",
+    "cordis.patch.yml"
   ],
   "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
     "client": {
       "platform": "web",
       "inject": [
