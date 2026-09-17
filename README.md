@@ -4,6 +4,36 @@ DSH 右侧栏里的一个 tab，把**一个 Agent Team 当一家公司**画出�
 employee = **Agent Team 的 teammate**（不是所有子代理）；**一个会话一个公司**；
 点得开板 / 规则 / 项目 / 会议室；开会时成员会**走到**会议室。
 
+## ⚠️ 装之前先看：你需要一个**完整 profile**（否则会以为这插件坏了）
+
+```bash
+# ① 建一个完整 profile（★ 必须带 --from-default-profile web，见下）
+dsh --profile myco --from-default-profile web
+
+# ② 再把面板装进去
+dsh plugin --profile myco add "@dsh-external/dsh-org-panel"
+
+# ③ 起它 —— 侧边栏会出现「办公室」
+dsh --profile myco --port 3099 --no-open
+```
+
+**不加这一步会怎样**（这是最容易踩的坑）：
+
+```
+$ dsh plugin --profile myco add "@dsh-external/dsh-org-panel"   # 装是装上了
+$ dsh --profile myco
+Error: dsh: plugin tree failed to load: dsh: 1 entry did not activate
+@dsh-external/dsh-org-panel: pending (waiting for service: webServer)
+```
+
+**这不是插件坏了**：面板 `inject = ['webServer']`（`lib/index.js:27`），
+而 **`webServer` 由 `@deepseek-ai/dsh-web-app` 提供** —— 一个只有 `dsh-base` 的裸 profile
+里没有它，插件就会一直 `pending`。用 `--from-default-profile web` 建的 profile
+其 `bundles` 是 `@deepseek-ai/dsh-base, @deepseek-ai/dsh-web-app`，装了就能起。
+
+> ⚠️ 别用 `dsh plugin add "@deepseek-ai/dsh-web-app"` 去补 —— 它的 rc 版依赖不在 npm registry 上
+> （实测 `ERR_PNPM_FETCH_404 … dsh-client-ui-command`）。**走 `--from-default-profile`**。
+
 ## 它是什么 / 不是什么
 
 - **是**：DSH 原生数据的可视化。员工名单来自 **`ctx.agentTeams`** 的 roster
