@@ -10,8 +10,8 @@ employee = **Agent Team 的 teammate**（不是所有子代理）；**一个会�
 # ① 建一个完整 profile（★ 必须带 --from-default-profile web，见下）
 dsh --profile myco --from-default-profile web
 
-# ② 再把面板装进去
-dsh plugin --profile myco add "@dsh-external/dsh-org-panel"
+# ② 再把面板装进去（★ 必须用 GitHub 地址 —— 本包【不在 npm registry 上】）
+dsh plugin --profile myco add "https://github.com/yjh051108/dsh-org-panel"
 
 # ③ 起它 —— 侧边栏会出现「办公室」
 dsh --profile myco --port 3099 --no-open
@@ -20,7 +20,7 @@ dsh --profile myco --port 3099 --no-open
 **不加这一步会怎样**（这是最容易踩的坑）：
 
 ```
-$ dsh plugin --profile myco add "@dsh-external/dsh-org-panel"   # 装是装上了
+$ dsh plugin --profile myco add "https://github.com/yjh051108/dsh-org-panel"   # 装是装上了
 $ dsh --profile myco
 Error: dsh: plugin tree failed to load: dsh: 1 entry did not activate
 @dsh-external/dsh-org-panel: pending (waiting for service: webServer)
