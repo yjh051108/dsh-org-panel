@@ -34,6 +34,35 @@ Error: dsh: plugin tree failed to load: dsh: 1 entry did not activate
 > ⚠️ 别用 `dsh plugin add "@deepseek-ai/dsh-web-app"` 去补 —— 它的 rc 版依赖不在 npm registry 上
 > （实测 `ERR_PNPM_FETCH_404 … dsh-client-ui-command`）。**走 `--from-default-profile`**。
 
+## 装不上怎么办（两类死法，对号入座）
+
+**先看你在哪一步失败** —— 两类都不需要读源码：
+
+```
+① 第②步 `dsh plugin add` 就失败
+   · `404` / `Not found` / `ERR_PNPM_FETCH_404`
+     ⇒ 你多半写成了裸包名（`@dsh-external/dsh-org-panel`）。
+       ★ 本包【不在 npm registry 上】⇒ 必须写 **GitHub 地址**：
+       `dsh plugin --profile <p> add "https://github.com/yjh051108/dsh-org-panel"`
+   · `'pnpm' is not recognized`
+     ⇒ **缺 pnpm 前置**（`dsh plugin` 把它转发给 profile 目录下的 pnpm）。
+       ⇒ 装 pnpm 并确保它在 `PATH` 上。
+
+② 装上了，但 `dsh --profile <p>` 起不来
+   · `plugin tree failed to load: dsh: 1 entry did not activate`
+     `@dsh-external/dsh-org-panel: pending (waiting for service: webServer)`
+     ⇒ **你的 profile 不完整**（缺 `@deepseek-ai/dsh-web-app`，它提供 `webServer`）。
+       ⇒ 用 `dsh --profile <p> --from-default-profile web` 重建（见本文最前面）。
+       ⇒ ⚠️ **这不是插件坏了** —— 面板 `inject = ['webServer']`，缺服务就一直是 `pending`。
+
+③ 起来了，但侧边栏**没有「办公室」**
+   · 先确认 client 半进没进 boot 清单：打开页面、搜 `@dsh-external/dsh-org-panel/client.js`
+     ⇒ 在 ⇒ 侧边栏右侧的 **`+`** 里应能找到 tab（或首次装载会自动打开一次）。
+     ⇒ 不在 ⇒ client 半没装载 ⇒ 回到 ② 检查 profile 的 `bundles` 有没有这一项。
+```
+> 这三条覆盖了我们实测到的**全部**失败形态。若你的症状不在其中 ⇒ 开个 issue 贴：
+> `dsh --version` · `dsh plugin --profile <p> list` 的输出 · 起服务时的完整报错。
+
 ## 它是什么 / 不是什么
 
 - **是**：DSH 原生数据的可视化。员工名单来自 **`ctx.agentTeams`** 的 roster
