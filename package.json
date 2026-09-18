@@ -18,6 +18,7 @@
     "public",
     "cordis.patch.yml"
   ],
+  "_publishNote": "★ 发布面 = files ∪ npm 必带项（README.md / LICENSE / package.json）= 41 件。notes/ shots/ tools/ runs/ 是【内部区】（开发笔记 / 截图 / 探针 / 产物）—— 不在 files 里，永不随包发出；★ 别把它们加进来（notes/ 里有大量开发期痕迹）。发布面唯一实现：omc-agent-teams/tools/publish-surface.mjs。",
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
