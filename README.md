@@ -1,3 +1,7 @@
+> ⚠️ 本仓已并入 [yjh051108/dsh-omc](https://github.com/yjh051108/dsh-omc)（单仓库化）。
+> 新装：`git clone https://github.com/yjh051108/dsh-omc && cd dsh-omc && ./install.sh`
+> 本仓保留为历史镜像；已 clone 的仍可 pull。
+
 # @dsh-external/dsh-org-panel — 侧边栏「办公室」
 
 DSH 右侧栏里的一个 tab，把**一个 Agent Team 当一家公司**画出来：
